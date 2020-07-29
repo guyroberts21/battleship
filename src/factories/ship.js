@@ -1,5 +1,9 @@
+import { v4 as uuid } from 'uuid';
+
 const CreateShip = (name, length, isHorizontal) => {
   const ship = new Array(length).fill(false);
+
+  const id = uuid();
 
   const hit = (i) => {
     ship[i] = true;
@@ -10,7 +14,7 @@ const CreateShip = (name, length, isHorizontal) => {
     return ship.every((i) => i);
   };
 
-  return { ship, length, name, isHorizontal, hit, isSunk };
+  return { ship, id, length, name, isHorizontal, hit, isSunk };
 };
 
 module.exports = CreateShip;
