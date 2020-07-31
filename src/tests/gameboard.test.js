@@ -7,9 +7,9 @@ describe('Gameboard', () => {
     const myShip = CreateShip('Battleship', 4, false);
     myBoard.addShip(myShip, 4, 3);
     expect(myBoard.grid[4][3]).toStrictEqual([myShip.name, myShip.id, 1]);
-    expect(myBoard.grid[4][4]).toStrictEqual([myShip.name, myShip.id, 2]);
-    expect(myBoard.grid[4][5]).toStrictEqual([myShip.name, myShip.id, 3]);
-    expect(myBoard.grid[4][6]).toStrictEqual([myShip.name, myShip.id, 4]);
+    expect(myBoard.grid[5][3]).toStrictEqual([myShip.name, myShip.id, 2]);
+    expect(myBoard.grid[6][3]).toStrictEqual([myShip.name, myShip.id, 3]);
+    expect(myBoard.grid[7][3]).toStrictEqual([myShip.name, myShip.id, 4]);
   });
 
   test('Gameboard correctly stores new ship', () => {
@@ -23,7 +23,17 @@ describe('Gameboard', () => {
     const myBoard = Gameboard();
     const myShip = CreateShip('Battleship', 4, false);
     myBoard.addShip(myShip, 4, 3);
-    myBoard.receiveAttack(4, 4);
+    myBoard.receiveAttack(5, 3);
     expect(myBoard.ships[0].ship[1]).toBe(true);
+  });
+
+  test('Gameboard reports when game is finished', () => {
+    const myBoard = Gameboard();
+    const myShip = CreateShip('Cruiser', 3, true);
+    myBoard.addShip(myShip, 5, 5);
+    myBoard.receiveAttack(5, 5);
+    myBoard.receiveAttack(5, 6);
+    myBoard.receiveAttack(5, 7);
+    expect(myBoard.checkDone()).toBe(true);
   });
 });

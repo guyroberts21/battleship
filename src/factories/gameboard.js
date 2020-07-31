@@ -1,5 +1,7 @@
 const Gameboard = () => {
-  const grid = new Array(10).fill(new Array(10).fill(null));
+  const grid = Array(10)
+    .fill(null)
+    .map(() => Array(10).fill(null));
   // Array for the ships (which will be added by user)
   let ships = [];
 
@@ -11,9 +13,9 @@ const Gameboard = () => {
 
       while (x < ship.length) {
         if (ship.isHorizontal) {
-          grid[i + x][j] = [ship.name, ship.id, x + 1];
-        } else {
           grid[i][j + x] = [ship.name, ship.id, x + 1];
+        } else {
+          grid[i + x][j] = [ship.name, ship.id, x + 1];
         }
         x++;
       }
@@ -37,7 +39,11 @@ const Gameboard = () => {
     }
   };
 
-  return { grid, ships, addShip, receiveAttack };
+  const checkDone = () => {
+    return ships.every((ship) => ship.isSunk());
+  };
+
+  return { grid, ships, addShip, receiveAttack, checkDone };
 };
 
 module.exports = Gameboard;
