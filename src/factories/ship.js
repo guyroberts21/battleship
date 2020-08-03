@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-const CreateShip = (name, length, isHorizontal) => {
+export const CreateShip = (name, length, isHorizontal) => {
   const ship = new Array(length).fill(false);
 
   const id = uuid();
@@ -17,4 +17,4 @@ const CreateShip = (name, length, isHorizontal) => {
   return { ship, id, length, name, isHorizontal, hit, isSunk };
 };
 
-module.exports = CreateShip;
+// module.exports = CreateShip;
