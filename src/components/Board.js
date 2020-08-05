@@ -11,6 +11,8 @@ export class Board extends Component {
             key={idx}
             square={square}
             num={idx}
+            name={this.props.name}
+            attackedByCpu={this.props.lastCpuAttack === idx}
           />
         ))}
       </div>

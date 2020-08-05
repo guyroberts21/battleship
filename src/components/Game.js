@@ -5,6 +5,7 @@ import { CreateShip } from '../factories/ship';
 
 export class Game extends Component {
   state = {
+    lastCpuAttack: null,
     player: Gameboard(),
     enemy: Gameboard(),
     playerIsNext: true,
@@ -23,25 +24,58 @@ export class Game extends Component {
     this.state.enemy.addShip(CreateShip('Destroyer', 2, true), 9, 7);
   }
 
+  randomAttack = (board) => {
+    // Helper fns
+    function getRandomInt(i) {
+      return Math.floor(Math.random() * i);
+    }
+
+    function getRandomCoords() {
+      return [getRandomInt(10), getRandomInt(10)];
+    }
+
+    // Keep looking for new spot
+    let i, j;
+    do {
+      [i, j] = getRandomCoords();
+    } while (board.grid[i][j] !== null);
+
+    board.receiveAttack(i, j);
+
+    // Update state of latest attack
+    this.setState({
+      lastCpuAttack: parseInt(j.toString() + i.toString()),
+    });
+
+    return board;
+  };
+
   handleClick = (i, j) => {
-    // console.log('Called from Gamejs');
-    // console.log(i, j);
     let updatedEnemy = this.state.enemy;
     updatedEnemy.receiveAttack(i, j);
+
+    let updatedPlayer = this.randomAttack(this.state.player);
+
     this.setState({
       enemy: updatedEnemy,
+      player: updatedPlayer,
     });
+
     console.log(this.state.enemy);
+    console.log(this.state.player);
   };
 
   render() {
     return (
       <div className="game">
         <Board
+          name="player"
           handleClick={this.handleClick}
           squares={this.state.player.grid.flat()}
+          lastCpuAttack={this.state.lastCpuAttack}
         />
         <Board
+          name="enemy"
           handleClick={this.handleClick}
           squares={this.state.enemy.grid.flat()}
         />
