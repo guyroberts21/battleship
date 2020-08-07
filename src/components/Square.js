@@ -25,7 +25,17 @@ export class Square extends Component {
     }
   };
 
+  getSquareState = (s) => {
+    // only add class if square has been attacked
+    if (!this.state.attacked) return '';
+
+    if (typeof s === 'object' && s !== null) return ' hit';
+    else return ' missed';
+  };
+
   attackSquare = (i, j) => {
+    if (this.props.isGameFinished) return false;
+
     // stop fn running if player attacks own board
     if (this.props.name !== 'enemy') return;
 
@@ -40,7 +50,11 @@ export class Square extends Component {
     return (
       <div
         onClick={() => this.attackSquare(i, j)}
-        className={'grid-square' + (this.state.attacked ? ' attacked' : '')}
+        className={
+          'grid-square' +
+          (this.state.attacked ? ' attacked' : '') +
+          this.getSquareState(this.props.square)
+        }
       ></div>
     );
   }

@@ -17,5 +17,13 @@
 }
 
 .attacked.grid-square {
-  background-color: orchid;
+  border: 2px solid orchid;
+}
+
+.attacked.missed.grid-square {
+  background-color: #bada55;
+}
+
+.attacked.hit.grid-square {
+  background-color: maroon;
 }

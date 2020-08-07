@@ -5,12 +5,12 @@ import { CreateShip } from '../factories/ship';
 
 export class Game extends Component {
   state = {
-    lastCpuAttack: null,
     player: Gameboard(),
     enemy: Gameboard(),
     playerIsNext: true,
     isGameFinished: false,
     cpuAttacks: [],
+    playerAttacks: [],
   };
 
   componentDidMount() {
@@ -24,6 +24,8 @@ export class Game extends Component {
     this.state.enemy.addShip(CreateShip('Cruiser', 3, false), 6, 8);
     this.state.enemy.addShip(CreateShip('Destroyer', 2, true), 9, 7);
   }
+
+  parseAttack = (i, j) => parseInt(j.toString() + i.toString());
 
   randomAttack = (board) => {
     // Helper fns
@@ -39,13 +41,13 @@ export class Game extends Component {
     let i, j;
     do {
       [i, j] = getRandomCoords();
-    } while (board.grid[i][j] !== null);
+    } while (this.state.cpuAttacks.includes(this.parseAttack(i, j)));
 
     board.receiveAttack(i, j);
 
     // Update state of latest attack
     let attacks = this.state.cpuAttacks;
-    let currentAttack = parseInt(j.toString() + i.toString());
+    let currentAttack = this.parseAttack(i, j);
     attacks.push(currentAttack);
     this.setState({
       cpuAttacks: attacks,
@@ -55,6 +57,15 @@ export class Game extends Component {
   };
 
   handleClick = (i, j) => {
+    if (this.state.isGameFinished) return false;
+
+    let attack = this.parseAttack(i, j);
+    if (this.state.playerAttacks.includes(attack)) return;
+
+    // append new attack
+    let updatedPlayerAttacks = this.state.playerAttacks;
+    updatedPlayerAttacks.push(attack);
+
     let updatedEnemy = this.state.enemy;
     updatedEnemy.receiveAttack(i, j);
 
@@ -63,10 +74,15 @@ export class Game extends Component {
     this.setState({
       enemy: updatedEnemy,
       player: updatedPlayer,
+      playerAttacks: updatedPlayerAttacks,
     });
 
-    console.log(this.state.enemy.grid[i][j]);
-    console.log(this.state.player.grid);
+    if (this.state.player.checkDone() || this.state.enemy.checkDone()) {
+      console.log('Game Finished');
+      this.setState({
+        isGameFinished: true,
+      });
+    }
   };
 
   render() {
@@ -76,14 +92,17 @@ export class Game extends Component {
           name="player"
           handleClick={this.handleClick}
           squares={this.state.player.grid.flat()}
-          lastCpuAttack={this.state.lastCpuAttack}
           cpuAttacks={this.state.cpuAttacks}
+          parseAttack={this.parseAttack}
+          isGameFinished={this.state.isGameFinished}
         />
         <Board
           name="enemy"
           handleClick={this.handleClick}
           squares={this.state.enemy.grid.flat()}
           cpuAttacks={this.state.cpuAttacks}
+          parseAttack={this.parseAttack}
+          isGameFinished={this.state.isGameFinished}
         />
       </div>
     );
