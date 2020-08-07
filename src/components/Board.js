@@ -12,7 +12,7 @@ export class Board extends Component {
             square={square}
             num={idx}
             name={this.props.name}
-            attackedByCpu={this.props.lastCpuAttack === idx}
+            attackedByCpu={this.props.cpuAttacks.includes(idx)}
           />
         ))}
       </div>

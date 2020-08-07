@@ -10,6 +10,7 @@ export class Game extends Component {
     enemy: Gameboard(),
     playerIsNext: true,
     isGameFinished: false,
+    cpuAttacks: [],
   };
 
   componentDidMount() {
@@ -43,8 +44,11 @@ export class Game extends Component {
     board.receiveAttack(i, j);
 
     // Update state of latest attack
+    let attacks = this.state.cpuAttacks;
+    let currentAttack = parseInt(j.toString() + i.toString());
+    attacks.push(currentAttack);
     this.setState({
-      lastCpuAttack: parseInt(j.toString() + i.toString()),
+      cpuAttacks: attacks,
     });
 
     return board;
@@ -61,8 +65,8 @@ export class Game extends Component {
       player: updatedPlayer,
     });
 
-    console.log(this.state.enemy);
-    console.log(this.state.player);
+    console.log(this.state.enemy.grid[i][j]);
+    console.log(this.state.player.grid);
   };
 
   render() {
@@ -73,11 +77,13 @@ export class Game extends Component {
           handleClick={this.handleClick}
           squares={this.state.player.grid.flat()}
           lastCpuAttack={this.state.lastCpuAttack}
+          cpuAttacks={this.state.cpuAttacks}
         />
         <Board
           name="enemy"
           handleClick={this.handleClick}
           squares={this.state.enemy.grid.flat()}
+          cpuAttacks={this.state.cpuAttacks}
         />
       </div>
     );

@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 
 export class Square extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      attacked: false,
-      attackedByCpu: false,
-    };
-  }
+  state = {
+    attacked: false,
+  };
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ attackedByCpu: nextProps.attackedByCpu });
+  static getDerivedStateFromProps(props, currentState) {
+    if (props.attackedByCpu && props.name === 'player') {
+      return {
+        attacked: true,
+      };
+    }
+    return null;
   }
 
   getCoords = (num) => {
@@ -39,10 +40,7 @@ export class Square extends Component {
     return (
       <div
         onClick={() => this.attackSquare(i, j)}
-        className={
-          (this.state.attacked || this.state.attackedByCpu ? 'attacked' : '') +
-          ' grid-square'
-        }
+        className={'grid-square' + (this.state.attacked ? ' attacked' : '')}
       ></div>
     );
   }
