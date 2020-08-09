@@ -12,9 +12,7 @@ export class Board extends Component {
             square={square}
             num={idx}
             name={this.props.name}
-            cpuAttacks={this.props.cpuAttacks}
-            attackedByCpu={this.props.cpuAttacks.includes(idx)}
-            parseAttack={this.props.parseAttack}
+            hasBeenAttacked={this.props.hits.includes(idx)}
             isGameFinished={this.props.isGameFinished}
           />
         ))}

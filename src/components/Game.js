@@ -1,88 +1,55 @@
 import React, { Component } from 'react';
 import Board from './Board';
-import Gameboard from '../factories/gameboard';
+import { Player } from '../factories/player';
 import { CreateShip } from '../factories/ship';
 
 export class Game extends Component {
-  state = {
-    player: Gameboard(),
-    enemy: Gameboard(),
-    playerIsNext: true,
-    isGameFinished: false,
-    cpuAttacks: [],
-    playerAttacks: [],
-  };
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
-    this.state.player.addShip(CreateShip('Carrier', 5, false), 0, 0);
-    this.state.player.addShip(CreateShip('Battleship', 4, true), 3, 1);
-    this.state.player.addShip(CreateShip('Cruiser', 3, false), 6, 8);
-    this.state.player.addShip(CreateShip('Destroyer', 2, true), 9, 7);
+    let player = Player('Player');
+    let cpu = Player('Computer');
+    // cpu.autoAddShips();
+    player.enemy = cpu;
+    cpu.enemy = player;
 
-    this.state.enemy.addShip(CreateShip('Carrier', 5, false), 0, 0);
-    this.state.enemy.addShip(CreateShip('Battleship', 4, true), 3, 1);
-    this.state.enemy.addShip(CreateShip('Cruiser', 3, false), 6, 8);
-    this.state.enemy.addShip(CreateShip('Destroyer', 2, true), 9, 7);
+    this.state = {
+      player,
+      cpu,
+      isGameFinished: false,
+      winner: null,
+    };
   }
 
-  parseAttack = (i, j) => parseInt(j.toString() + i.toString());
+  componentDidMount() {
+    this.state.player.board.addShip(CreateShip('Carrier', 5, false), 0, 0);
+    this.state.player.board.addShip(CreateShip('Battleship', 4, true), 3, 1);
+    this.state.player.board.addShip(CreateShip('Cruiser', 3, false), 6, 8);
+    this.state.player.board.addShip(CreateShip('Destroyer', 2, true), 9, 7);
 
-  randomAttack = (board) => {
-    // Helper fns
-    function getRandomInt(i) {
-      return Math.floor(Math.random() * i);
-    }
-
-    function getRandomCoords() {
-      return [getRandomInt(10), getRandomInt(10)];
-    }
-
-    // Keep looking for new spot
-    let i, j;
-    do {
-      [i, j] = getRandomCoords();
-    } while (this.state.cpuAttacks.includes(this.parseAttack(i, j)));
-
-    board.receiveAttack(i, j);
-
-    // Update state of latest attack
-    let attacks = this.state.cpuAttacks;
-    let currentAttack = this.parseAttack(i, j);
-    attacks.push(currentAttack);
-    this.setState({
-      cpuAttacks: attacks,
-    });
-
-    return board;
-  };
+    this.state.cpu.board.addShip(CreateShip('Carrier', 5, false), 0, 0);
+    this.state.cpu.board.addShip(CreateShip('Battleship', 4, true), 3, 1);
+    this.state.cpu.board.addShip(CreateShip('Cruiser', 3, false), 6, 8);
+    this.state.cpu.board.addShip(CreateShip('Destroyer', 2, true), 9, 7);
+  }
 
   handleClick = (i, j) => {
-    if (this.state.isGameFinished) return false;
+    if (this.state.isGameFinished) {
+      // console.log('dfsdfjsdlf');
+      return false;
+    }
 
-    let attack = this.parseAttack(i, j);
-    if (this.state.playerAttacks.includes(attack)) return;
+    let updatedPlayer = this.state.player;
+    let enemy = this.state.cpu;
 
-    // append new attack
-    let updatedPlayerAttacks = this.state.playerAttacks;
-    updatedPlayerAttacks.push(attack);
-
-    let updatedEnemy = this.state.enemy;
-    updatedEnemy.receiveAttack(i, j);
-
-    let updatedPlayer = this.randomAttack(this.state.player);
+    const playerWon = updatedPlayer.playTurn(enemy, i, j);
+    const enemyWon = enemy.randomAttack(updatedPlayer);
 
     this.setState({
-      enemy: updatedEnemy,
       player: updatedPlayer,
-      playerAttacks: updatedPlayerAttacks,
+      cpu: enemy,
+      isGameFinished: playerWon || enemyWon,
     });
-
-    if (this.state.player.checkDone() || this.state.enemy.checkDone()) {
-      console.log('Game Finished');
-      this.setState({
-        isGameFinished: true,
-      });
-    }
   };
 
   render() {
@@ -91,17 +58,15 @@ export class Game extends Component {
         <Board
           name="player"
           handleClick={this.handleClick}
-          squares={this.state.player.grid.flat()}
-          cpuAttacks={this.state.cpuAttacks}
-          parseAttack={this.parseAttack}
+          squares={this.state.player.board.grid.flat()}
+          hits={this.state.cpu.attacks}
           isGameFinished={this.state.isGameFinished}
         />
         <Board
           name="enemy"
           handleClick={this.handleClick}
-          squares={this.state.enemy.grid.flat()}
-          cpuAttacks={this.state.cpuAttacks}
-          parseAttack={this.parseAttack}
+          squares={this.state.cpu.board.grid.flat()}
+          hits={this.state.player.attacks}
           isGameFinished={this.state.isGameFinished}
         />
       </div>
