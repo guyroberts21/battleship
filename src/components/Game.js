@@ -9,7 +9,7 @@ export class Game extends Component {
 
     let player = Player('Player');
     let cpu = Player('Computer');
-    // cpu.autoAddShips();
+    cpu.autoAddShips();
     player.enemy = cpu;
     cpu.enemy = player;
 
@@ -22,20 +22,15 @@ export class Game extends Component {
   }
 
   componentDidMount() {
-    this.state.player.board.addShip(CreateShip('Carrier', 5, false), 0, 0);
-    this.state.player.board.addShip(CreateShip('Battleship', 4, true), 3, 1);
-    this.state.player.board.addShip(CreateShip('Cruiser', 3, false), 6, 8);
-    this.state.player.board.addShip(CreateShip('Destroyer', 2, true), 9, 7);
-
-    this.state.cpu.board.addShip(CreateShip('Carrier', 5, false), 0, 0);
-    this.state.cpu.board.addShip(CreateShip('Battleship', 4, true), 3, 1);
-    this.state.cpu.board.addShip(CreateShip('Cruiser', 3, false), 6, 8);
-    this.state.cpu.board.addShip(CreateShip('Destroyer', 2, true), 9, 7);
+    this.state.player.board.addShip(CreateShip(5, false), 0, 0);
+    this.state.player.board.addShip(CreateShip(4, true), 3, 1);
+    this.state.player.board.addShip(CreateShip(3, false), 6, 8);
+    this.state.player.board.addShip(CreateShip(2, true), 9, 7);
   }
 
   handleClick = (i, j) => {
     if (this.state.isGameFinished) {
-      // console.log('dfsdfjsdlf');
+      console.log('dfsdfjsdlf');
       return false;
     }
 
@@ -49,6 +44,7 @@ export class Game extends Component {
       player: updatedPlayer,
       cpu: enemy,
       isGameFinished: playerWon || enemyWon,
+      winner: playerWon ? 'Player' : 'CPU',
     });
   };
 

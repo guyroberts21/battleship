@@ -1,4 +1,5 @@
 import Gameboard from './gameboard';
+import { CreateShip } from './ship';
 
 export const Player = (name) => {
   // main vars
@@ -19,19 +20,41 @@ export const Player = (name) => {
     return enemy.board.checkDone();
   };
 
+  // random place ships (for cpu)
+  const autoPlace = (size) => {
+    let [i, j] = getRandomCoords();
+    let isHorizontal = Math.random() < 0.5 ? true : false;
+
+    let res = board.addShip(CreateShip(size, isHorizontal), i, j);
+
+    if (!res) {
+      return autoPlace(size);
+    }
+  };
+
+  const autoAddShips = () => {
+    let ships = [2, 3, 3, 4, 5];
+
+    for (let ship of ships) {
+      autoPlace(ship);
+    }
+
+    return true;
+  };
+
+  // Helper fns
+  const getRandomInt = (i) => {
+    return Math.floor(Math.random() * i);
+  };
+
+  const getRandomCoords = () => {
+    return [getRandomInt(10), getRandomInt(10)];
+  };
+
   // convert between array and single num
   const parseAttack = (i, j) => parseInt(j.toString() + i.toString());
 
   const randomAttack = (enemy) => {
-    // Helper fns
-    const getRandomInt = (i) => {
-      return Math.floor(Math.random() * i);
-    };
-
-    const getRandomCoords = () => {
-      return [getRandomInt(10), getRandomInt(10)];
-    };
-
     // Keep looking for new spot
     let i, j;
     do {
@@ -44,5 +67,5 @@ export const Player = (name) => {
     return enemy.board.checkDone();
   };
 
-  return { board, enemy, attacks, playTurn, randomAttack };
+  return { board, enemy, attacks, playTurn, autoAddShips, randomAttack };
 };

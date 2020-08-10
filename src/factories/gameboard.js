@@ -5,24 +5,33 @@ const Gameboard = () => {
   // Array for the ships (which will be added by user)
   let ships = [];
 
-  const addShip = (ship, i, j) => {
-    try {
-      ships.push(ship);
-
-      let x = 0;
-
-      while (x < ship.length) {
-        if (ship.isHorizontal) {
-          grid[i][j + x] = [ship.name, ship.id, x + 1];
-        } else {
-          grid[i + x][j] = [ship.name, ship.id, x + 1];
-        }
-        x++;
+  const checkShipAvailability = (ship, i, j) => {
+    for (let x = 0; x < ship.length; x++) {
+      if (ship.isHorizontal) {
+        if (j + x < 9 && grid[i][j + x] === null) continue;
+        else return false;
+      } else {
+        if (i + x < 9 && grid[i + x][j] === null) continue;
+        else return false;
       }
-    } catch (e) {
-      console.log('Ship cannot be added:', e);
-      return;
     }
+    return true;
+  };
+
+  const addShip = (ship, i, j) => {
+    // don't add if not available
+    if (!checkShipAvailability(ship, i, j)) return false;
+
+    for (let x = 0; x < ship.length; x++) {
+      if (ship.isHorizontal) {
+        grid[i][j + x] = [ship.name, ship.id, x + 1];
+      } else {
+        grid[i + x][j] = [ship.name, ship.id, x + 1];
+      }
+    }
+
+    ships.push(ship);
+    return true;
   };
 
   const receiveAttack = (i, j) => {

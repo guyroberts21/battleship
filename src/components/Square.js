@@ -45,7 +45,7 @@ export class Square extends Component {
     if (this.props.isGameFinished) return false;
 
     // stop fn running if player attacks own board
-    if (this.props.name !== 'enemy') return;
+    if (this.props.name !== 'enemy' || this.state.attacked) return;
 
     this.setState({
       attacked: true,
