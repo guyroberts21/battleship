@@ -1,11 +1,23 @@
-const Player = require('../factories/player');
-const Gameboard = require('../factories/gameboard');
+import { Player } from '../factories/player';
+import { CreateShip } from '../factories/ship';
 
 describe('Player', () => {
-  test('Player places correct random coordinate', () => {
-    const player1 = Player();
-    const gameboard1 = Gameboard();
-    player1.randomAttack(gameboard1);
-    expect(gameboard1.grid.some((c) => c)).toBe(true);
+  const player = Player('Player');
+  const enemy = Player('Enemy');
+  player.enemy = enemy;
+  enemy.enemy = player;
+  enemy.board.addShip(CreateShip(5, false), 2, 3);
+
+  test('Player can auto add their ships', () => {
+    expect(player.autoAddShips()).toBe(true);
+  });
+
+  test('Player turn attacks enemy correctly', () => {
+    player.playTurn(enemy, 1, 5);
+    expect(enemy.board.grid[1][5]).toBe('missed');
+  });
+
+  test('Player attacks random coordinate', () => {
+    expect(player.randomAttack(enemy)).toBe(false);
   });
 });
