@@ -20,6 +20,26 @@ export class Square extends Component {
     return null;
   }
 
+  // Drag and Drop Methods
+  dragEnter = (e) => {
+    e.preventDefault();
+  };
+
+  dragOver = (e) => {
+    e.preventDefault();
+  };
+
+  dragLeave = (e) => {};
+
+  drop = (e) => {
+    e.preventDefault();
+
+    // const color = e.dataTransfer.getData('block');
+
+    // Handle event on parent
+    this.props.handleDrop(this.props.num);
+  };
+
   // function to convert from single num into array with i, j coords
   getCoords = (num) => {
     if (parseInt(num) < 10) {
@@ -58,6 +78,10 @@ export class Square extends Component {
     return (
       <div
         onClick={() => this.attackSquare(i, j)}
+        onDragEnter={this.dragEnter}
+        onDragLeave={this.dragLeave}
+        onDragOver={this.dragOver}
+        onDrop={this.drop}
         className={
           'grid-square' +
           (this.state.attacked ? ' attacked' : '') +

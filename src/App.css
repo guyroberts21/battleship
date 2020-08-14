@@ -1,3 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --grid-square-width: 40px;
+  --destroyer-width: 80px;
+  --cruiser-width: 120px;
+  --battleship-width: 160px;
+  --carrier-width: 200px;
+}
+
 .game {
   display: flex;
   justify-content: center;
@@ -12,8 +24,34 @@
 
 .grid-square {
   border: 1px solid #bada55;
-  width: 40px;
-  height: 40px;
+  width: var(--grid-square-width);
+  height: var(--grid-square-width);
+}
+
+.drag-ships .ship {
+  height: var(--grid-square-width);
+  /* background-color: #000; */
+  margin-top: 10px;
+}
+
+.destroyer {
+  background-color: red;
+  width: var(--destroyer-width);
+}
+
+.cruiser {
+  background-color: orange;
+  width: var(--cruiser-width);
+}
+
+.battleships {
+  background-color: green;
+  width: var(--battleship-width);
+}
+
+.carrier {
+  background-color: yellow;
+  width: var(--carrier-width);
 }
 
 .attacked.grid-square {

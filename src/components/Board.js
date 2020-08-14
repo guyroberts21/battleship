@@ -8,6 +8,7 @@ export class Board extends Component {
         {this.props.squares.map((square, idx) => (
           <Square
             handleClick={this.props.handleClick}
+            handleDrop={this.props.handleDrop}
             key={idx}
             square={square}
             num={idx}
