@@ -8,10 +8,10 @@ const Gameboard = () => {
   const checkShipAvailability = (ship, i, j) => {
     for (let x = 0; x < ship.length; x++) {
       if (ship.isHorizontal) {
-        if (j + x < 9 && grid[i][j + x] === null) continue;
+        if (j + x <= 9 && grid[i][j + x] === null) continue;
         else return false;
       } else {
-        if (i + x < 9 && grid[i + x][j] === null) continue;
+        if (i + x <= 9 && grid[i + x][j] === null) continue;
         else return false;
       }
     }
@@ -52,7 +52,13 @@ const Gameboard = () => {
     return ships.every((ship) => ship.isSunk());
   };
 
-  return { grid, ships, addShip, receiveAttack, checkDone };
+  return {
+    grid,
+    ships,
+    addShip,
+    receiveAttack,
+    checkDone,
+  };
 };
 
 module.exports = Gameboard;

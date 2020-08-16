@@ -34,31 +34,35 @@ export class Square extends Component {
   drop = (e) => {
     e.preventDefault();
 
-    // const color = e.dataTransfer.getData('block');
+    // When using data transfer, getData always returns string values!
+    const quartileClicked = e.dataTransfer.getData('quartileClicked');
+    const size = parseInt(e.dataTransfer.getData('size'));
+    const idx = parseInt(this.props.num);
 
     // Handle event on parent
-    this.props.handleDrop(this.props.num);
-  };
-
-  // function to convert from single num into array with i, j coords
-  getCoords = (num) => {
-    if (parseInt(num) < 10) {
-      return [0, parseInt(num)];
-    } else {
-      return num
-        .toString()
-        .split('')
-        .map((i) => parseInt(i));
+    if (this.props.handleDrop(quartileClicked, size, idx)) {
+      return true;
     }
+
+    return null;
   };
 
   // This method was created to get the status of any given square
   getSquareState = (s) => {
     // only add class if square has been attacked
-    if (!this.state.attacked) return '';
-
-    if (typeof s === 'object' && s !== null) return ' hit';
-    else return ' missed';
+    if (typeof s === 'object' && s !== null) {
+      if (!this.state.attacked && this.props.name === 'player') {
+        return ' ship';
+      } else {
+        return ' hit';
+      }
+    } else {
+      if (this.state.attacked) {
+        return ' missed';
+      } else {
+        return '';
+      }
+    }
   };
 
   attackSquare = (i, j) => {
@@ -74,7 +78,7 @@ export class Square extends Component {
   };
 
   render() {
-    const [i, j] = this.getCoords(this.props.num);
+    const [i, j] = this.props.getCoords(this.props.num);
     return (
       <div
         onClick={() => this.attackSquare(i, j)}

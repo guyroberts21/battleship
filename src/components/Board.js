@@ -9,6 +9,7 @@ export class Board extends Component {
           <Square
             handleClick={this.props.handleClick}
             handleDrop={this.props.handleDrop}
+            getCoords={this.props.getCoords}
             key={idx}
             square={square}
             num={idx}
