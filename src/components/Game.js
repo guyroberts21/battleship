@@ -33,7 +33,7 @@ export class Game extends Component {
       if (this.state.placeHorizontal) {
         output.push(idx - (position - i));
       } else {
-        output.push(idx - (position - i * 10));
+        output.push(idx - (position - i) * 10);
       }
     }
 
@@ -54,7 +54,6 @@ export class Game extends Component {
 
   handleDrop = (quartileClicked, size, idx) => {
     const indexes = this.getIndexes(quartileClicked, size, idx);
-    console.log(indexes);
     const [i, j] = this.getCoords(indexes[0]);
 
     const placeHorizontal = this.state.placeHorizontal;
