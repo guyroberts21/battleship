@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Board from './Board';
 import Ships from './Ships';
+import Buttons from './Buttons';
 import { Player } from '../factories/player';
 import { CreateShip } from '../factories/ship';
 
@@ -108,12 +109,19 @@ export class Game extends Component {
           ships={this.state.ships}
           horizontal={this.state.placeHorizontal}
         />
-        <button
-          onClick={this.flipShips}
-          style={{ position: 'absolute', top: 0, left: 0 }}
-        >
-          FLIP
-        </button>
+        <Buttons
+          flipShips={this.flipShips}
+          autoPlace={() => {
+            if (this.state.player.board.ships.length !== 0) return;
+
+            let updatedPlayer = this.state.player;
+            updatedPlayer.autoAddShips();
+
+            this.setState({
+              player: updatedPlayer,
+            });
+          }}
+        />
         <Board
           name="player"
           handleClick={this.handleClick}

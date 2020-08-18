@@ -10,7 +10,9 @@ export class Ships extends Component {
       5: 'carrier',
     };
     return (
-      <div className="drag-ships">
+      <div
+        className={'drag-ships' + (this.props.horizontal ? '' : ' vertical')}
+      >
         {this.props.ships.map((ship, idx) => (
           <Ship
             name={ships[ship]}

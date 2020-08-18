@@ -1,8 +1,17 @@
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 :root {
+  /* Color Scheme */
+  --clr-light: #fff;
+  --clr-dark: #161819;
+
+  --clr-blue: #8ef2ff;
+  --clr-accent: #e36e40;
+
   --grid-square-width: 40px;
   --destroyer-width: 80px;
   --cruiser-width: 120px;
@@ -10,88 +19,187 @@
   --carrier-width: 200px;
 }
 
+body {
+  font-family: 'Neuton', serif;
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: var(--clr-dark);
+  color: var(--clr-light);
+}
+
+.site-header {
+  font-family: 'Roboto Slab', serif;
+  position: relative;
+  height: 100px;
+  background-color: var(--color-blue);
+  color: var(--clr-blue);
+  border-bottom: 2px solid var(--clr-accent);
+}
+
+.site-header h1 {
+  font-size: 2.25em;
+  text-align: center;
+  padding: 0.25em 0.5em;
+  margin: 0;
+}
+
+.github-link {
+  color: var(--clr-light);
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  font-size: 35px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.github-link:hover {
+  color: var(--clr-accent);
+}
+
+.github-link:visited {
+  color: var(--clr-light);
+}
+
+.game-info {
+  text-align: center;
+  font-size: 1.5em;
+  color: #e36e40;
+  margin-right: 2em;
+}
+
 .game {
   display: flex;
   justify-content: center;
+  margin-top: 40px;
 }
 
 .gameboard {
   display: grid;
-  margin: 20px;
+  margin: 80px;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
+  border: 1px solid var(--clr-light);
 }
 
 .grid-square {
-  border: 1px solid #bada55;
+  border: 1px solid var(--clr-light);
   width: var(--grid-square-width);
   height: var(--grid-square-width);
 }
 
+.grid-square:hover {
+  background-color: var(--clr-light);
+  /* opacity: 0.65; */
+}
+
 .drag-ships {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  top: 5em;
-  left: 2em;
+  top: 10em;
+  left: 4em;
+}
+
+.drag-ships.vertical {
+  flex-direction: row-reverse;
+}
+
+.ship-btns {
+  position: absolute;
+  left: 0;
+  top: 590px;
+  margin-left: 2.7em;
+  font-size: 1.5em;
+}
+
+.flip-ships,
+.auto-place {
+  transition: color 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.flip-ships {
+  color: var(--clr-light);
+  height: 50px;
+  width: 50px;
+}
+
+.auto-place {
+  color: var(--clr-light);
+  left: 110px;
+}
+
+.flip-ships:hover,
+.auto-place:hover {
+  color: var(--clr-accent);
 }
 
 .drag-ships .ship {
   height: var(--grid-square-width);
-  /* background-color: #000; */
-  margin-top: 10px;
+  background-color: var(--clr-blue);
+  margin-top: 1em;
+  transition: opacity 0.1s ease;
 }
 
-.drag-ships .ship.vertical {
+.drag-ships.vertical .ship {
+  margin-right: 1em;
+}
+
+.drag-ships .ship:hover {
+  opacity: 0.8;
+}
+
+.drag-ships .ship {
   width: var(--grid-square-width);
 }
 
-.destroyer {
-  background-color: red;
+.drag-ships.vertical .ship {
+  width: var(--grid-square-width);
+}
+
+.drag-ships .destroyer {
   width: var(--destroyer-width);
 }
 
-.cruiser {
-  background-color: orange;
+.drag-ships .cruiser {
   width: var(--cruiser-width);
 }
 
-.battleship {
-  background-color: green;
+.drag-ships .battleship {
   width: var(--battleship-width);
 }
 
-.carrier {
-  background-color: yellow;
+.drag-ships .carrier {
   width: var(--carrier-width);
 }
 
-.destroyer.vertical {
+.drag-ships.vertical .destroyer {
   height: var(--destroyer-width);
 }
 
-.cruiser.vertical {
+.drag-ships.vertical .cruiser {
   height: var(--cruiser-width);
 }
 
-.battleship.vertical {
+.drag-ships.vertical .battleship {
   height: var(--battleship-width);
 }
 
-.carrier.vertical {
+.drag-ships.vertical .carrier {
   height: var(--carrier-width);
 }
 
-.attacked.grid-square {
-  border: 2px solid orchid;
-}
-
 .attacked.missed.grid-square {
-  background-color: #bada55;
+  background-color: var(--clr-light);
 }
 
 .attacked.hit.grid-square {
-  background-color: maroon;
+  background-color: var(--clr-accent);
 }
 
 .grid-square.ship {
-  background-color: pink;
+  background-color: var(--clr-blue);
 }

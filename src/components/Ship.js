@@ -43,9 +43,7 @@ export class Ship extends Component {
   render() {
     return (
       <div
-        className={
-          this.props.name + ' ship' + (this.props.horizontal ? '' : ' vertical')
-        }
+        className={this.props.name + ' ship'}
         draggable={true}
         onDragStart={this.dragStart}
         onMouseDown={this.handleMouseDown}
