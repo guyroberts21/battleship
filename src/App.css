@@ -75,12 +75,33 @@ body {
   margin-top: 40px;
 }
 
+.winner-text {
+  font-size: 1.5em;
+  color: var(--clr-blue);
+  position: absolute;
+  top: 6.5em;
+  right: 5em;
+}
+
+.winner-text.hidden {
+  display: none;
+}
+
 .gameboard {
   display: grid;
-  margin: 80px;
+  margin: 0 80px 80px 80px;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
   border: 1px solid var(--clr-light);
+}
+
+.player-name {
+  color: var(--clr-accent);
+  font-size: 1.25em;
+  font-style: italic;
+  font-weight: 700;
+  text-align: center;
+  margin: 30px 0 10px 0;
 }
 
 .grid-square {
@@ -142,6 +163,11 @@ body {
   background-color: var(--clr-blue);
   margin-top: 1em;
   transition: opacity 0.1s ease;
+}
+
+.drag-ships .ship.dragged {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .drag-ships.vertical .ship {

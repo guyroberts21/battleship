@@ -16,6 +16,8 @@ export class Ships extends Component {
         {this.props.ships.map((ship, idx) => (
           <Ship
             name={ships[ship]}
+            dragged={this.props.draggedShips.includes(idx)}
+            shipActive={() => this.props.shipActive(idx)}
             size={Object.keys(ships).find((key) => ships[key] === ships[ship])}
             key={idx}
             horizontal={this.props.horizontal}

@@ -27,6 +27,8 @@ export class Ship extends Component {
     e.dataTransfer.setData('block', styles.backgroundColor);
     e.dataTransfer.setData('quartileClicked', this.state.quartileClicked);
     e.dataTransfer.setData('size', this.props.size);
+
+    this.props.shipActive();
   };
 
   handleMouseDown = (e) => {
@@ -43,8 +45,10 @@ export class Ship extends Component {
   render() {
     return (
       <div
-        className={this.props.name + ' ship'}
-        draggable={true}
+        className={
+          this.props.name + ' ship' + (this.props.dragged ? ' dragged' : '')
+        }
+        draggable={!this.props.dragged}
         onDragStart={this.dragStart}
         onMouseDown={this.handleMouseDown}
       ></div>

@@ -10,8 +10,6 @@ export class Game extends Component {
     super(props);
 
     let player = Player('Player');
-    let ships = [2, 3, 3, 4, 5];
-    let placeHorizontal = true;
     let cpu = Player('Computer');
     cpu.autoAddShips();
     player.enemy = cpu;
@@ -19,9 +17,12 @@ export class Game extends Component {
 
     this.state = {
       player,
-      ships,
-      placeHorizontal,
       cpu,
+      ships: [2, 3, 3, 4, 5],
+      placeHorizontal: true,
+      shipActive: null,
+      draggedShips: [],
+      hasGameStarted: false,
       isGameFinished: false,
       winner: null,
     };
@@ -67,9 +68,12 @@ export class Game extends Component {
     );
 
     if (addShipSuccessfully) {
-      this.setState({
+      this.setState((prevState) => ({
         player: updatedPlayer,
-      });
+        hasGameStarted: true,
+        draggedShips: [...prevState.draggedShips, prevState.shipActive],
+      }));
+
       return true;
     } else {
       return false;
@@ -96,6 +100,12 @@ export class Game extends Component {
     });
   };
 
+  updateActiveShip = (idx) => {
+    this.setState({
+      shipActive: idx,
+    });
+  };
+
   flipShips = (e) => {
     this.setState((prevState) => ({
       placeHorizontal: !prevState.placeHorizontal,
@@ -107,6 +117,8 @@ export class Game extends Component {
       <div className="game">
         <Ships
           ships={this.state.ships}
+          shipActive={this.updateActiveShip}
+          draggedShips={this.state.draggedShips}
           horizontal={this.state.placeHorizontal}
         />
         <Buttons
@@ -119,6 +131,10 @@ export class Game extends Component {
 
             this.setState({
               player: updatedPlayer,
+              // Show game has started
+              hasGameStarted: true,
+              // Set dragged ships to ships arr indexes
+              draggedShips: [0, 1, 2, 3, 4],
             });
           }}
         />
@@ -128,7 +144,8 @@ export class Game extends Component {
           handleDrop={this.handleDrop}
           getCoords={this.getCoords}
           squares={this.state.player.board.grid.flat()}
-          hits={this.state.cpu.attacks}
+          hits={this.state.player.attacks}
+          hasGameStarted={this.state.hasGameStarted}
           isGameFinished={this.state.isGameFinished}
         />
         <Board
@@ -137,9 +154,17 @@ export class Game extends Component {
           handleDrop={this.handleDrop}
           getCoords={this.getCoords}
           squares={this.state.cpu.board.grid.flat()}
-          hits={this.state.player.attacks}
+          hits={this.state.cpu.attacks}
+          hasGameStarted={this.state.hasGameStarted}
           isGameFinished={this.state.isGameFinished}
         />
+        <div
+          className={
+            'winner-text' + (this.state.isGameFinished ? '' : ' hidden')
+          }
+        >
+          <span>{this.state.winner} wins!</span>
+        </div>
       </div>
     );
   }

@@ -9,11 +9,11 @@ export const Player = (name) => {
 
   const playTurn = (enemy, i, j) => {
     // stop fn running if player tries to attack same spot
-    console.log('I and J:', i, j);
 
     let attack = parseAttack(i, j);
-    console.log('Attack:', attack);
     if (enemy.attacks.includes(attack)) return;
+
+    console.log('Player attack', attack);
 
     // enemy receives attack
     enemy.attacks.push(attack);
@@ -55,7 +55,7 @@ export const Player = (name) => {
   };
 
   // convert between array and single num
-  const parseAttack = (i, j) => parseInt(j.toString() + i.toString());
+  const parseAttack = (i, j) => parseInt(i.toString() + j.toString());
 
   const randomAttack = (enemy) => {
     // Keep looking for new spot
@@ -63,7 +63,6 @@ export const Player = (name) => {
     do {
       [i, j] = getRandomCoords();
     } while (enemy.attacks.includes(parseAttack(i, j)));
-    console.log(i, j);
 
     enemy.board.receiveAttack(i, j);
     enemy.attacks.push(parseAttack(i, j));
